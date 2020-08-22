@@ -1,1 +1,13 @@
-// Here we will have our middleware for auth route
+// Middleware for auth route
+
+const jwt = require("jsonwebtoken");
+
+module.exports = (req, res, next) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        jwt.verify(token, "longer-secret-is-better");
+        next();
+    } catch (error) {
+        res.status(401).json({ message: "Authentication failed!" });
+    }
+};
