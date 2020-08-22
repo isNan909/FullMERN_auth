@@ -64,7 +64,7 @@ router.post("/register-user",
     ],
     (req, res, next) => {
         const errors = validationResult(req);
-        console.log(req.body);
+        // console.log(req.body);
 
         if (!errors.isEmpty()) {
             return res.status(422).jsonp(errors.array());
