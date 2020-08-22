@@ -62,7 +62,7 @@ router.post(
       .not()
       .isEmpty()
       .isLength({ min: 4 })
-      .withMessage('Name must be atleast 4 characters long'),
+      .withMessage('Name must be atleast  characters long'),
     check('email', 'Email is not valid').not().isEmpty().isEmail(),
     check('password', 'Password should be between 5 to 8 characters long')
       .not()
@@ -102,17 +102,17 @@ router.post(
 
 // Get All Users
 router.route('/all-user').get(authorize, (req, res) => {
-  userSchema.find((error, response) => {
-    if (error) {
-      return next(error);
-    } else {
-      res.status(200).json(response);
-    }
-  });
-});
+    userSchema.find((error, response) => {
+        if (error) {
+            return next(error)
+        } else {
+            res.status(200).json(response)
+        }
+    })
+})
 
 // Get A Single User
-router.route('/profile-user/:id').get((req, res, next) => {
+router.route('/profile-user/:id').get(authorize, (req, res, next) => {
   userSchema.findById(req.params.id, (error, data) => {
     if (error) {
       return next(error);

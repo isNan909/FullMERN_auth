@@ -13,7 +13,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 app.use('/api/auth', auth);
 
 if (process.env.NODE_ENV === 'production') {

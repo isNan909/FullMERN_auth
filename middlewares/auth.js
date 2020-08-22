@@ -8,6 +8,6 @@ module.exports = (req, res, next) => {
         jwt.verify(token, "longer-secret-is-better");
         next();
     } catch (error) {
-        res.status(401).json({ message: "Authentication failed!" });
+        res.status(401).json({ message: "No token, denied authorization" });
     }
 };
