@@ -1,0 +1,11 @@
+{
+  "name": "authentication-mern",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/ishan-me/FullMERN_auth.git",
+  "author": "Ishan Manandhar <ishan02016@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
