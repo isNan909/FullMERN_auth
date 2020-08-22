@@ -40,15 +40,15 @@ app.listen(PORT, () =>
   )
 );
 
-// Express error handling
-app.use((req, res, next) => {
-  setImmediate(() => {
-    next(new Error('Something went wrong'));
-  });
-});
+// // Express error handling
+// app.use((req, res, next) => {
+//   setImmediate(() => {
+//     next(new Error('Something went wrong'));
+//   });
+// });
 
-app.use(function (err, req, res, next) {
-  console.error(err.message);
-  if (!err.statusCode) err.statusCode = 500;
-  res.status(err.statusCode).send(err.message);
-});
+// app.use(function (err, req, res, next) {
+//   console.error(err.message);
+//   if (!err.statusCode) err.statusCode = 500;
+//   res.status(err.statusCode).send(err.message);
+// });
