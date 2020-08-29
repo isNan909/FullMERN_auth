@@ -17,7 +17,6 @@ export const load_user = () => async (dispatch) => {
     try {
       const res = await axios.get(
         `${process.env.CLIENT_API_URI}/api/login-user`,
-        body,
         config
       );
       dispatch({
@@ -51,6 +50,7 @@ export const login = (name, email, password) => async (dispatch) => {
       type: LOGIN_SUCESS,
       payload: res.data,
     });
+    dispatch(load_user());
   } catch (err) {
     dispatch({
       type: LOGIN_FAILED,
