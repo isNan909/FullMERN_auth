@@ -3,7 +3,7 @@ import {
   LOGIN_FAILED,
   USER_LOADED_SUCESS,
   USER_LOADED_FAILED,
-} from '../actions/types';
+} from '../actions/action.types';
 
 const initialState = {
   access: localStorage.getItem('access'),
