@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { login } from '../actions/action.auth';
 
-const Login = () => {
+const Login = ({ login }) => {
   const [loginData, SetLoginData] = useState({
     name: '',
     email: '',
     password: '',
   });
 
-  // const { name, email, password } = loginData;
+  const { name, email, password } = loginData;
 
   const onChange = (e) =>
     SetLoginData({ ...loginData, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
     e.preventDefault();
-    // add login function
+    login(name, email, password);
   };
 
   //will check authentication
@@ -30,6 +31,7 @@ const Login = () => {
           type="text"
           placeholder="Your name here"
           name="name"
+          autoComplete="on"
           onChange={(e) => onChange(e)}
         />
         <br />
@@ -37,6 +39,7 @@ const Login = () => {
           type="email"
           placeholder="Your email here"
           name="email"
+          autoComplete="on"
           onChange={(e) => onChange(e)}
         />
         <br />
@@ -44,6 +47,7 @@ const Login = () => {
           type="password"
           placeholder="Your password here"
           name="password"
+          autoComplete="on"
           onChange={(e) => onChange(e)}
         />
         <br />
@@ -65,4 +69,4 @@ const Login = () => {
 //   }
 // }
 
-export default connect()(Login);
+export default connect(null, { login })(Login);
