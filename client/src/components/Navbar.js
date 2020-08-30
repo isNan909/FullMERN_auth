@@ -3,16 +3,16 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../actions/action.auth';
 
-const Navbar = ({ check_authenticated, logout }) => {
+const Navbar = ({ isAuthenticated, logout }) => {
   const authorizedLinks = (
     <li>
-      <a onClick={logout} href="#!">
+      <Link to="/" onClick={logout}>
         Logout
-      </a>
+      </Link>
     </li>
   );
 
-  const unauthorizedLinks = (
+  const guestLinks = (
     <>
       <li>
         <Link to="/login">Log In</Link>
@@ -30,15 +30,21 @@ const Navbar = ({ check_authenticated, logout }) => {
           <li>
             <Link to="/">Home</Link>
           </li>
-          {<> {check_authenticated ? authorizedLinks : unauthorizedLinks}</>}
+          {<> {isAuthenticated ? authorizedLinks : guestLinks}</>}
         </ul>
       </nav>
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  check_authenticated: state.auth.check_authenticated,
-});
+// const mapStateToProps = (state) => ({
+//   isAuthenticated: state.auth.isAuthenticated,
+// });
+
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+  };
+};
 
 export default connect(mapStateToProps, { logout })(Navbar);

@@ -6,7 +6,7 @@ import { check_authenticated, load_user } from '../actions/action.auth';
 const Layout = (props) => {
   useEffect(() => {
     props.check_authenticated();
-    props.load_user();
+    //props.load_user();
     // eslint-disable-next-line
   }, []);
 

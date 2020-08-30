@@ -13,13 +13,12 @@ import {
 
 export const check_authenticated = () => async (dispatch) => {
   if (localStorage.getItem('access')) {
-    const tokenCheck = JSON.stringify({
-      token: localStorage.getItem('access'),
-    });
+    const tokenCheck = { token: localStorage.getItem('access') };
     try {
-      if (tokenCheck !== null) {
+      if (tokenCheck.token !== null) {
         dispatch({
           type: AUTHENTICATION_SUCESS,
+          payload: tokenCheck,
         });
       }
     } catch (e) {
@@ -27,10 +26,11 @@ export const check_authenticated = () => async (dispatch) => {
         type: AUTHENTICATION_FAILED,
       });
     }
+  } else {
+    dispatch({
+      type: AUTHENTICATION_FAILED,
+    });
   }
-  dispatch({
-    type: AUTHENTICATION_FAILED,
-  });
 };
 
 export const load_user = () => async (dispatch) => {
@@ -44,7 +44,7 @@ export const load_user = () => async (dispatch) => {
     };
     try {
       const res = await axios.get(
-        `${process.env.CLIENT_API_URI}/api/login-user`,
+        `${process.env.REACT_APP_API_URL}/login-user`,
         config
       );
       dispatch({
@@ -66,11 +66,11 @@ export const login = (name, email, password) => async (dispatch) => {
     },
   };
 
-  const body = JSON.stringify({ name, email, password });
+  const body = { name, email, password };
 
   try {
     const res = await axios.post(
-      `${process.env.CLIENT_API_URI}/auth/signin-user`,
+      `${process.env.REACT_APP_API_URL}/auth/signin-user`,
       body,
       config
     );

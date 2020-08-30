@@ -24,7 +24,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isAuthenticated: true,
-        access: payload.access,
+        access: payload.token,
       };
     case AUTHENTICATION_FAILED:
       return {
@@ -33,10 +33,11 @@ export default function (state = initialState, action) {
         access: null,
       };
     case LOGIN_SUCESS:
+      localStorage.setItem('access', payload.token);
       return {
         ...state,
         isAuthenticated: true,
-        access: payload.access,
+        access: payload.token,
       };
     case LOGIN_FAILED:
     case SIGNUP_FAILED:
@@ -51,7 +52,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isAuthenticated: false,
-      }
+      };
     case USER_LOADED_SUCESS:
       return {
         ...state,
