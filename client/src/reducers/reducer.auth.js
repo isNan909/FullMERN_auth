@@ -1,8 +1,6 @@
 import {
   LOGIN_SUCESS,
   LOGIN_FAILED,
-  USER_LOADED_SUCESS,
-  USER_LOADED_FAILED,
   AUTHENTICATION_SUCESS,
   AUTHENTICATION_FAILED,
   SIGNUP_SUCESS,
@@ -53,16 +51,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isAuthenticated: false,
-      };
-    case USER_LOADED_SUCESS:
-      return {
-        ...state,
-        user: payload,
-      };
-    case USER_LOADED_FAILED:
-      return {
-        ...state,
-        user: null,
       };
     default:
       return state;

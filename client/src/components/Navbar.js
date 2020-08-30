@@ -11,9 +11,6 @@ const Navbar = ({ isAuthenticated, logout }) => {
           Logout
         </Link>
       </li>
-      <li>
-        <b>You are logged in</b>
-      </li>
     </>
   );
 

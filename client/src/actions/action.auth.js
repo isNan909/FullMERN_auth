@@ -2,8 +2,6 @@ import axios from 'axios';
 import {
   LOGIN_SUCESS,
   LOGIN_FAILED,
-  USER_LOADED_SUCESS,
-  USER_LOADED_FAILED,
   AUTHENTICATION_SUCESS,
   AUTHENTICATION_FAILED,
   SIGNUP_FAILED,
@@ -33,31 +31,6 @@ export const check_authenticated = () => async (dispatch) => {
   }
 };
 
-export const load_user = () => async (dispatch) => {
-  if (localStorage.getItem('access')) {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `JWT ${localStorage.getItem('access')}`,
-        Accept: 'application/json',
-      },
-    };
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/login-user`,
-        config
-      );
-      dispatch({
-        type: USER_LOADED_SUCESS,
-        payload: res.data,
-      });
-    } catch (err) {
-      dispatch({
-        type: USER_LOADED_FAILED,
-      });
-    }
-  }
-};
 
 export const login = (name, email, password) => async (dispatch) => {
   const config = {
@@ -78,7 +51,6 @@ export const login = (name, email, password) => async (dispatch) => {
       type: LOGIN_SUCESS,
       payload: res.data,
     });
-    dispatch(load_user());
     console.log('user logged In!');
   } catch (err) {
     dispatch({
