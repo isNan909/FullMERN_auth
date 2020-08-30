@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { login } from '../actions/action.auth';
 
-const Login = ({ login }) => {
+const Login = ({ login, check_authenticated }) => {
   const [loginData, SetLoginData] = useState({
     name: '',
     email: '',
@@ -20,12 +20,14 @@ const Login = ({ login }) => {
     login(name, email, password);
   };
 
-  //will check authentication
+  //check authentication
+  if (check_authenticated) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div>
-      <h1>Login to your account</h1>
-      login form
+      <h1>Sign In to your account</h1>
       <form onSubmit={(e) => onSubmit(e)}>
         <input
           type="text"
@@ -57,16 +59,14 @@ const Login = ({ login }) => {
       <br />
       <br />
       <h6>
-        Already have account?<Link to="/signup">Create Account</Link>
+        Dont have account?<Link to="/signup">Create Account</Link>
       </h6>
     </div>
   );
 };
 
-// const mapStateToProps = (state, ownProps) => {
-//   return {
-//     prop: state.prop
-//   }
-// }
+const mapStateToProps = (state) => ({
+  check_authenticated: state.auth.check_authenticated,
+});
 
-export default connect(null, { login })(Login);
+export default connect(mapStateToProps, { login })(Login);
