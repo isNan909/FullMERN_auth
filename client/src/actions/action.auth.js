@@ -79,6 +79,7 @@ export const login = (name, email, password) => async (dispatch) => {
       payload: res.data,
     });
     dispatch(load_user());
+    console.log('user logged In!');
   } catch (err) {
     dispatch({
       type: LOGIN_FAILED,
@@ -93,11 +94,12 @@ export const signup = (name, email, password) => async (dispatch) => {
     },
   };
 
-  const body = JSON.stringify({ name, email, password });
+  const body = { name, email, password };
 
   try {
+    console.log(body);
     const res = await axios.post(
-      `${process.env.CLIENT_API_URI}/auth/signup-user`,
+      `${process.env.REACT_APP_API_URL}/auth/register-user`,
       body,
       config
     );
@@ -105,6 +107,7 @@ export const signup = (name, email, password) => async (dispatch) => {
       type: SIGNUP_SUCESS,
       payload: res.data,
     });
+    console.log('user created!');
   } catch (err) {
     dispatch({
       type: SIGNUP_FAILED,

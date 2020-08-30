@@ -1,26 +1,31 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../actions/action.auth';
 
 const Navbar = ({ isAuthenticated, logout }) => {
   const authorizedLinks = (
-    <li>
-      <Link to="/" onClick={logout}>
-        Logout
-      </Link>
-    </li>
+    <>
+      <li>
+        <Link to="/" onClick={logout}>
+          Logout
+        </Link>
+      </li>
+      <li>
+        <b>You are logged in</b>
+      </li>
+    </>
   );
 
   const guestLinks = (
-    <>
+    <Fragment>
       <li>
         <Link to="/login">Log In</Link>
       </li>
       <li>
         <Link to="/signup">Sign Up</Link>
       </li>
-    </>
+    </Fragment>
   );
 
   return (
@@ -30,16 +35,16 @@ const Navbar = ({ isAuthenticated, logout }) => {
           <li>
             <Link to="/">Home</Link>
           </li>
-          {<> {isAuthenticated ? authorizedLinks : guestLinks}</>}
+          {
+            <Fragment>
+              {isAuthenticated ? authorizedLinks : guestLinks}
+            </Fragment>
+          }
         </ul>
       </nav>
     </div>
   );
 };
-
-// const mapStateToProps = (state) => ({
-//   isAuthenticated: state.auth.isAuthenticated,
-// });
 
 const mapStateToProps = (state) => {
   return {
