@@ -28,6 +28,8 @@ router.get("/", auth, async (req, res) => {
 // User Signin
 router.post("/signin-user", (req, res) => {
   let getUser;
+  console.log("body " + req.body.email);
+
   userSchema
     .findOne({
       email: req.body.email,
@@ -35,7 +37,7 @@ router.post("/signin-user", (req, res) => {
     .then((user) => {
       if (!user) {
         return res.status(401).json({
-          message: "Authentication failed",
+          message: "Authentication failed No email",
         });
       }
       getUser = user;
@@ -44,13 +46,13 @@ router.post("/signin-user", (req, res) => {
     .then((response) => {
       if (!response) {
         return res.status(401).json({
-          message: "Authentication failed",
+          message: "Authentication failed No response",
         });
       }
-
+      console.log("getUser" + getUser);
       payload = {
         user: {
-          email: getUser.email,
+          email: req.body.email,
           userId: getUser._id,
         },
       };
@@ -58,15 +60,15 @@ router.post("/signin-user", (req, res) => {
       let jwtToken = jwt.sign(payload, "longer-secret-is-better", {
         expiresIn: "1h",
       });
-      res.status(200).json({
+      return res.status(200).json({
         token: jwtToken,
       });
-    })
-    .catch((err) => {
-      return res.status(401).json({
-        message: "Authentication failed",
-      });
     });
+  //  .catch((err) => {
+  //    res.status(401).json({
+  //      message: "Authentication failed",
+  //    });
+  // });
 });
 
 // Signup User

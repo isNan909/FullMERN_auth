@@ -17,12 +17,13 @@ const Login = ({ login, isAuthenticated }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    console.log(name, email, password);
     login(name, email, password);
   };
 
   //check authentication
   if (isAuthenticated) {
-    return <Redirect to="/" />;
+    return <Redirect to="/sample" />;
   }
 
   return (

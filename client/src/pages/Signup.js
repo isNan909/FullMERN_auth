@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { signup } from '../actions/action.auth';
+import React, { useState } from "react";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { signup } from "../actions/action.auth";
 
-const Signup = ({ signup, check_authenticated }) => {
+const Signup = ({ signup, isAuthenticated }) => {
   const [accountCreated, setAccountCreated] = useState(false);
   const [signupData, SetSignupData] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
   });
 
   const { name, email, password } = signupData;
@@ -23,8 +23,8 @@ const Signup = ({ signup, check_authenticated }) => {
   };
 
   //check authentication
-  if (check_authenticated) {
-    return <Redirect to="/" />;
+  if (isAuthenticated) {
+    return <Redirect to="/sample" />;
   }
 
   if (accountCreated) {
@@ -72,7 +72,7 @@ const Signup = ({ signup, check_authenticated }) => {
 };
 
 const mapStateToProps = (state) => ({
-  check_authenticated: state.auth.check_authenticated,
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(mapStateToProps, { signup })(Signup);

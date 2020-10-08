@@ -17,7 +17,7 @@ export const check_authenticated = () => async (dispatch) => {
   }
 
   try {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/`);
+    const res = await axios.get("api/auth/");
 
     dispatch({
       type: AUTHENTICATION_SUCESS,
@@ -32,19 +32,16 @@ export const check_authenticated = () => async (dispatch) => {
 
 export const login = (name, email, password) => async (dispatch) => {
   const config = {
-    header: {
+    headers: {
       "Content-Type": "application/json",
     },
   };
 
   const body = JSON.stringify({ name, email, password });
-
+  console.log(body);
   try {
-    const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}/auth/signin-user`,
-      body,
-      config
-    );
+    const res = await axios.post("api/auth/signin-user", body, config);
+    console.log(res.data);
     dispatch({
       type: LOGIN_SUCESS,
       payload: res.data,
@@ -60,7 +57,7 @@ export const login = (name, email, password) => async (dispatch) => {
 
 export const signup = (name, email, password) => async (dispatch) => {
   const config = {
-    header: {
+    headers: {
       "Content-Type": "application/json",
     },
   };
@@ -69,11 +66,7 @@ export const signup = (name, email, password) => async (dispatch) => {
 
   try {
     console.log(body);
-    const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}/auth/register-user`,
-      body,
-      config
-    );
+    const res = await axios.post("api/auth/register-user", body, config);
     dispatch({
       type: SIGNUP_SUCESS,
       payload: res.data,
