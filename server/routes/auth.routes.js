@@ -1,16 +1,32 @@
 // Route for autht
 // routes/auth.routes.js
 
-const express = require('express');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const express = require("express");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const router = express.Router();
-const userSchema = require('../models/users');
-const authorize = require('../middlewares/auth');
-const { check, validationResult } = require('express-validator');
+const userSchema = require("../models/users");
+const authorize = require("../middlewares/auth");
+const { check, validationResult } = require("express-validator");
+
+//Require auth middleware
+const auth = require("../middlewares/auth");
+
+//@route GET api/auth
+//@desc authenticate and get user
+//@acess Private
+router.get("/", auth, async (req, res) => {
+  try {
+    const user = await userSchema.findById(req.user.userId).select("-password");
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 // User Signin
-router.post('/signin-user', (req, res, next) => {
+router.post("/signin-user", (req, res) => {
   let getUser;
   userSchema
     .findOne({
@@ -19,7 +35,7 @@ router.post('/signin-user', (req, res, next) => {
     .then((user) => {
       if (!user) {
         return res.status(401).json({
-          message: 'Authentication failed',
+          message: "Authentication failed",
         });
       }
       getUser = user;
@@ -28,48 +44,47 @@ router.post('/signin-user', (req, res, next) => {
     .then((response) => {
       if (!response) {
         return res.status(401).json({
-          message: 'Authentication failed',
+          message: "Authentication failed",
         });
       }
-      let jwtToken = jwt.sign(
-        {
+
+      payload = {
+        user: {
           email: getUser.email,
           userId: getUser._id,
         },
-        'longer-secret-is-better',
-        {
-          expiresIn: '1h',
-        }
-      );
+      };
+
+      let jwtToken = jwt.sign(payload, "longer-secret-is-better", {
+        expiresIn: "1h",
+      });
       res.status(200).json({
         token: jwtToken,
-        expiresIn: 3600,
-        msg: getUser,
       });
     })
     .catch((err) => {
       return res.status(401).json({
-        message: 'Authentication failed',
+        message: "Authentication failed",
       });
     });
 });
 
 // Signup User
 router.post(
-  '/register-user',
+  "/register-user",
   [
-    check('name')
+    check("name")
       .not()
       .isEmpty()
       .isLength({ min: 4 })
-      .withMessage('Name must be atleast  characters long'),
-    check('email', 'Email is not valid').not().isEmpty().isEmail(),
-    check('password', 'Password should be between 5 to 8 characters long')
+      .withMessage("Name must be atleast  characters long"),
+    check("email", "Email is not valid").not().isEmpty().isEmail(),
+    check("password", "Password should be between 5 to 8 characters long")
       .not()
       .isEmpty()
       .isLength({ min: 5, max: 8 }),
   ],
-  (req, res, next) => {
+  (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json(errors.array());
@@ -80,18 +95,38 @@ router.post(
           email: req.body.email,
           password: hash,
         });
+
         user
           .save()
           .then((response) => {
-            res.status(201).json({
-              message: 'User successfully created!',
-              result: response,
+            if (!response) {
+              return res.status(401).json({
+                message: "Authentication failed",
+              });
+            }
+
+            //jwt payload
+            payload = {
+              user: {
+                email: user.email,
+                userId: user._id,
+              },
+            };
+            //jwt signature
+            let jwtToken = jwt.sign(payload, "longer-secret-is-better", {
+              expiresIn: "1h",
+            });
+            //Send authorization token
+            return res.status(200).json({
+              token: jwtToken,
             });
           })
+
           .catch((error) => {
             res.status(500).json({
               error: error,
             });
+            console.log(error);
           });
       });
     }
@@ -99,18 +134,18 @@ router.post(
 );
 
 // Get All Users
-router.route('/all-user').get(authorize, (req, res) => {
-    userSchema.find((error, response) => {
-        if (error) {
-            return next(error)
-        } else {
-            res.status(200).json(response)
-        }
-    })
-})
+router.route("/all-user").get(authorize, (req, res) => {
+  userSchema.find((error, response) => {
+    if (error) {
+      return next(error);
+    } else {
+      res.status(200).json(response);
+    }
+  });
+});
 
 // Get A Single User
-router.route('/profile-user/:id').get(authorize, (req, res, next) => {
+router.route("/profile-user/:id").get(authorize, (req, res, next) => {
   userSchema.findById(req.params.id, (error, data) => {
     if (error) {
       return next(error);
@@ -123,7 +158,7 @@ router.route('/profile-user/:id').get(authorize, (req, res, next) => {
 });
 
 // Delete A User
-router.route('/delete-user/:id').delete((req, res, next) => {
+router.route("/delete-user/:id").delete((req, res, next) => {
   userSchema.findByIdAndRemove(req.params.id, (error, data) => {
     if (error) {
       return next(error);
