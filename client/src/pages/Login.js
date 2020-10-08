@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { login } from '../actions/action.auth';
+import React, { useState } from "react";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { login } from "../actions/action.auth";
 
-const Login = ({ login, check_authenticated }) => {
+const Login = ({ login, isAuthenticated }) => {
   const [loginData, SetLoginData] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
   });
 
   const { name, email, password } = loginData;
@@ -21,7 +21,7 @@ const Login = ({ login, check_authenticated }) => {
   };
 
   //check authentication
-  if (check_authenticated) {
+  if (isAuthenticated) {
     return <Redirect to="/" />;
   }
 
@@ -66,7 +66,7 @@ const Login = ({ login, check_authenticated }) => {
 };
 
 const mapStateToProps = (state) => ({
-  check_authenticated: state.auth.check_authenticated,
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(mapStateToProps, { login })(Login);

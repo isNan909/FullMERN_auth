@@ -37,7 +37,7 @@ export const login = (name, email, password) => async (dispatch) => {
     },
   };
 
-  const body = { name, email, password };
+  const body = JSON.stringify({ name, email, password });
 
   try {
     const res = await axios.post(
@@ -65,7 +65,7 @@ export const signup = (name, email, password) => async (dispatch) => {
     },
   };
 
-  const body = { name, email, password };
+  const body = JSON.stringify({ name, email, password });
 
   try {
     console.log(body);
