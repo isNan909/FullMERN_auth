@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   LOGIN_SUCESS,
   LOGIN_FAILED,
@@ -7,35 +7,33 @@ import {
   SIGNUP_FAILED,
   SIGNUP_SUCESS,
   LOGOUT_USER,
-} from '../actions/action.types';
+} from "./action.types";
+
+import setAuthToken from "../utils/setAuthToken";
 
 export const check_authenticated = () => async (dispatch) => {
-  if (localStorage.getItem('access')) {
-    const tokenCheck = { token: localStorage.getItem('access') };
-    try {
-      if (tokenCheck.token !== null) {
-        dispatch({
-          type: AUTHENTICATION_SUCESS,
-          payload: tokenCheck,
-        });
-      }
-    } catch (e) {
-      dispatch({
-        type: AUTHENTICATION_FAILED,
-      });
-    }
-  } else {
+  if (localStorage.access) {
+    setAuthToken(localStorage.access);
+  }
+
+  try {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/`);
+
+    dispatch({
+      type: AUTHENTICATION_SUCESS,
+      payload: res.data,
+    });
+  } catch (e) {
     dispatch({
       type: AUTHENTICATION_FAILED,
     });
   }
 };
 
-
 export const login = (name, email, password) => async (dispatch) => {
   const config = {
     header: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   };
 
@@ -51,7 +49,8 @@ export const login = (name, email, password) => async (dispatch) => {
       type: LOGIN_SUCESS,
       payload: res.data,
     });
-    console.log('user logged In!');
+    dispatch(check_authenticated());
+    console.log("user logged In!");
   } catch (err) {
     dispatch({
       type: LOGIN_FAILED,
@@ -62,7 +61,7 @@ export const login = (name, email, password) => async (dispatch) => {
 export const signup = (name, email, password) => async (dispatch) => {
   const config = {
     header: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   };
 
@@ -79,7 +78,8 @@ export const signup = (name, email, password) => async (dispatch) => {
       type: SIGNUP_SUCESS,
       payload: res.data,
     });
-    console.log('user created!');
+    dispatch(check_authenticated());
+    console.log("user created!");
   } catch (err) {
     dispatch({
       type: SIGNUP_FAILED,
