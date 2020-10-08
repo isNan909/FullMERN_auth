@@ -11,6 +11,7 @@ import {
 
 import setAuthToken from "../utils/setAuthToken";
 
+//Action checks for authentication
 export const check_authenticated = () => async (dispatch) => {
   if (localStorage.access) {
     setAuthToken(localStorage.access);

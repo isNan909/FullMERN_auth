@@ -8,6 +8,7 @@ import Signup from "../../pages/Signup";
 import Users from "../../pages/Users";
 import Activated from "../../pages/Activated";
 
+//All the routes file
 const Routes = () => {
   return (
     <div>

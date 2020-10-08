@@ -11,6 +11,7 @@ import Layout from "./hoc/Layout";
 import { check_authenticated } from "./actions/action.auth";
 import setAuthToken from "./utils/setAuthToken";
 
+//Check for token
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }

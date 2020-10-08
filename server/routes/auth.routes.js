@@ -28,8 +28,7 @@ router.get("/", auth, async (req, res) => {
 // User Signin
 router.post("/signin-user", (req, res) => {
   let getUser;
-  console.log("body " + req.body.email);
-
+  //Find the user return him a token
   userSchema
     .findOne({
       email: req.body.email,
@@ -37,7 +36,7 @@ router.post("/signin-user", (req, res) => {
     .then((user) => {
       if (!user) {
         return res.status(401).json({
-          message: "Authentication failed No email",
+          message: "Authentication failed",
         });
       }
       getUser = user;
@@ -46,13 +45,13 @@ router.post("/signin-user", (req, res) => {
     .then((response) => {
       if (!response) {
         return res.status(401).json({
-          message: "Authentication failed No response",
+          message: "Authentication failed",
         });
       }
-      console.log("getUser" + getUser);
+
       payload = {
         user: {
-          email: req.body.email,
+          email: getUser.email,
           userId: getUser._id,
         },
       };
@@ -63,12 +62,12 @@ router.post("/signin-user", (req, res) => {
       return res.status(200).json({
         token: jwtToken,
       });
+    })
+    .catch((err) => {
+      res.status(401).json({
+        message: "Authentication failed",
+      });
     });
-  //  .catch((err) => {
-  //    res.status(401).json({
-  //      message: "Authentication failed",
-  //    });
-  // });
 });
 
 // Signup User
