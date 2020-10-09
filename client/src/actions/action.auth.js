@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   LOGIN_SUCESS,
   LOGIN_FAILED,
@@ -7,51 +7,48 @@ import {
   SIGNUP_FAILED,
   SIGNUP_SUCESS,
   LOGOUT_USER,
-} from '../actions/action.types';
+} from "./action.types";
 
+import setAuthToken from "../utils/setAuthToken";
+
+//Action checks for authentication
 export const check_authenticated = () => async (dispatch) => {
-  if (localStorage.getItem('access')) {
-    const tokenCheck = { token: localStorage.getItem('access') };
-    try {
-      if (tokenCheck.token !== null) {
-        dispatch({
-          type: AUTHENTICATION_SUCESS,
-          payload: tokenCheck,
-        });
-      }
-    } catch (e) {
-      dispatch({
-        type: AUTHENTICATION_FAILED,
-      });
-    }
-  } else {
+  if (localStorage.access) {
+    setAuthToken(localStorage.access);
+  }
+
+  try {
+    const res = await axios.get("api/auth/");
+
+    dispatch({
+      type: AUTHENTICATION_SUCESS,
+      payload: res.data,
+    });
+  } catch (e) {
     dispatch({
       type: AUTHENTICATION_FAILED,
     });
   }
 };
 
-
 export const login = (name, email, password) => async (dispatch) => {
   const config = {
-    header: {
-      'Content-Type': 'application/json',
+    headers: {
+      "Content-Type": "application/json",
     },
   };
 
-  const body = { name, email, password };
-
+  const body = JSON.stringify({ name, email, password });
+  console.log(body);
   try {
-    const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}/auth/signin-user`,
-      body,
-      config
-    );
+    const res = await axios.post("api/auth/signin-user", body, config);
+    console.log(res.data);
     dispatch({
       type: LOGIN_SUCESS,
       payload: res.data,
     });
-    console.log('user logged In!');
+    dispatch(check_authenticated());
+    console.log("user logged In!");
   } catch (err) {
     dispatch({
       type: LOGIN_FAILED,
@@ -61,25 +58,22 @@ export const login = (name, email, password) => async (dispatch) => {
 
 export const signup = (name, email, password) => async (dispatch) => {
   const config = {
-    header: {
-      'Content-Type': 'application/json',
+    headers: {
+      "Content-Type": "application/json",
     },
   };
 
-  const body = { name, email, password };
+  const body = JSON.stringify({ name, email, password });
 
   try {
     console.log(body);
-    const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}/auth/register-user`,
-      body,
-      config
-    );
+    const res = await axios.post("api/auth/register-user", body, config);
     dispatch({
       type: SIGNUP_SUCESS,
       payload: res.data,
     });
-    console.log('user created!');
+    dispatch(check_authenticated());
+    console.log("user created!");
   } catch (err) {
     dispatch({
       type: SIGNUP_FAILED,
